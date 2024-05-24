@@ -15,4 +15,5 @@ deploy:
     - terraform plan -out=tfplan
     - terraform apply -auto-approve tfplan
   only:
-    - main
+    changes:
+      - yandex-k8s-cluster/**/*
