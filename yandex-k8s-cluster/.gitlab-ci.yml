@@ -1,0 +1,18 @@
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  image: sharuman/debiank8s:latest
+  environment:
+    name: production/kluster-k8s    
+  before_script:    
+    - export AWS_ACCESS_KEY_ID=YCAJEAqtyS3GW6j6V2ruR60vD
+    - export AWS_SECRET_ACCESS_KEY=YCMpat3uM7BL8h4ViWHZNwYDG630oaCA1HsRuqno
+    - export YC_TOKEN=t1.9euelZqNjJvOzInGnZXNks2KkZzPm-3rnpWajpCdmZaXys-VlcmNkMbInJbl8_cNNT1N-e81fGRp_t3z901jOk357zV8ZGn-zef1656VmsaNmJaOjs_PlM-KiZCQlJyc7_zF656VmsaNmJaOjs_PlM-KiZCQlJyc.H8Ym4YejFqglnzNTkxRHcHDxMLJKwE8NKMIUqoCJaARWl8xsD6USp_iZrEYxkcaoB1L66wZZTS6RFxmxxGZRDg
+  script:
+    - terraform init
+    - terraform plan -out=tfplan
+    - terraform apply -auto-approve tfplan
+  only:
+    - main
