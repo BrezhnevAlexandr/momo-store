@@ -11,6 +11,7 @@ deploy:
     - export AWS_SECRET_ACCESS_KEY=YCMpat3uM7BL8h4ViWHZNwYDG630oaCA1HsRuqno
     - export YC_TOKEN=t1.9euelZqNjJvOzInGnZXNks2KkZzPm-3rnpWajpCdmZaXys-VlcmNkMbInJbl8_cNNT1N-e81fGRp_t3z901jOk357zV8ZGn-zef1656VmsaNmJaOjs_PlM-KiZCQlJyc7_zF656VmsaNmJaOjs_PlM-KiZCQlJyc.H8Ym4YejFqglnzNTkxRHcHDxMLJKwE8NKMIUqoCJaARWl8xsD6USp_iZrEYxkcaoB1L66wZZTS6RFxmxxGZRDg
   script:
+    - cd yandex-k8s-cluster/
     - terraform init
     - terraform plan -out=tfplan
     - terraform apply -auto-approve tfplan
