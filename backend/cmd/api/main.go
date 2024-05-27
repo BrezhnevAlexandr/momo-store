@@ -43,13 +43,26 @@ func run() error {
 		return fmt.Errorf("cannot create app instance: %w", err)
 	}
 
-	router, err := newRouter(instance)
+	// Создаем основной маршрутизатор
+	mux := http.NewServeMux()
+	
+	// Добавляем маршрут /health
+	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintf(w, "all is good\n")
+	})
+
+	// Получаем основной обработчик из newRouter(instance)
+	handler, err := newRouter(instance)
 	if err != nil {
 		return fmt.Errorf("cannot create router instance: %w", err)
 	}
 
+	// Используем основной маршрутизатор для всех остальных маршрутов
+	mux.Handle("/", handler)
+
 	srv := &http.Server{
-		Handler: router,
+		Handler: mux,
 	}
 
 	errChan := make(chan error, 1)

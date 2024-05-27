@@ -1,0 +1,59 @@
+stages:
+  - build
+  - release
+  - test
+
+variables:
+  VERSION: "1.0.${CI_PIPELINE_ID}"
+  DOCKER_DRIVER: overlay2
+
+# Сборка и отправка образа с помощью Kaniko
+build-backend-code-job:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:v1.9.0-debug
+    entrypoint: [""]
+  only:
+    changes:
+      - backend/**/*
+  script:
+    - echo "build docker backend"
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}/backend"
+      --dockerfile "${CI_PROJECT_DIR}/backend/Dockerfile"
+      --destination "${CI_REGISTRY_IMAGE}/momo-backend:$CI_COMMIT_SHA"
+      --build-arg VERSION=$VERSION
+      --cache=true
+      
+
+# Тестирование бэкенда
+test-backend:
+  stage: test
+  image: golang:1.17
+  script:
+    - go test -v ./...
+  only:
+    changes:
+      - backend/**/*
+  dependencies:
+    - build-backend-code-job
+
+
+# Публикация Docker-образа с помощью Crane
+upload-backend-release:
+  variables:
+    GIT_STRATEGY: none
+  image:
+    name: gcr.io/go-containerregistry/crane:debug
+    entrypoint: [ "" ]
+  cache: [ ]
+  stage: release
+  only:
+    changes:
+      - backend/**/*
+  needs:
+    - build-backend-code-job
+  before_script:
+    - crane auth login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - crane tag $CI_REGISTRY_IMAGE/momo-backend:$CI_COMMIT_SHA $VERSION
