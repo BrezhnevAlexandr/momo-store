@@ -21,4 +21,15 @@ backend:
     strategy: depend
   only:
     changes:
-      - backend/**/*  
+      - backend/**/*
+
+
+frontend:
+  stage: module-pipelines
+  trigger:
+    include:
+      - local: /frontend/.gitlab-ci.yml
+    strategy: depend
+  only:
+    changes:
+      - frontend/**/*   
