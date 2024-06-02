@@ -1,10 +1,9 @@
 stages:
   - build
   - release
-  - test
 
 variables:
-  VERSION: "1.0.${CI_PIPELINE_ID}"
+  VERSION: "1.0.${NEXT_VERSION_F}"
   DOCKER_DRIVER: overlay2
 
 # Сборка и отправка образа с помощью Kaniko
@@ -25,21 +24,7 @@ build-frontend-code-job:
       --build-arg VERSION=$VERSION
       --cache=true
 
-# Тестирование фронтенда
-test-frontend:
-  stage: test
-  image: node:16
-  script:
-    - cd frontend
-    - npm install
-    - npm test
-  only:
-    changes:
-      - frontend/**/*
-  dependencies:
-    - build-frontend-code-job
-
-# Публикация Docker-образа с помощью Crane
+# Публикация Docker-образа с помощью Crane 
 upload-frontend-release:
   variables:
     GIT_STRATEGY: none

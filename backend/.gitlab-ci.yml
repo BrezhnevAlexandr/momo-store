@@ -4,10 +4,10 @@ stages:
   - test
 
 variables:
-  VERSION: "1.0.${CI_PIPELINE_ID}"
+  VERSION: "1.0.${NEXT_VERSION_B}"
   DOCKER_DRIVER: overlay2
 
-# Сборка и отправка образа с помощью Kaniko
+# Сборка и отправка образа с помощью  Kaniko 
 build-backend-code-job:
   stage: build
   image:
@@ -26,10 +26,10 @@ build-backend-code-job:
       --cache=true
       
 
-# Тестирование бэкенда
+# Тестирование бэкенда 
 test-backend:
   stage: test
-  image: golang:1.17
+  image: huecker.io/library/golang:1.17
   script:
     - cd backend
     - go test -v ./...

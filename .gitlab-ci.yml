@@ -22,6 +22,7 @@ backend:
   only:
     changes:
       - backend/**/*
+  
 
 
 frontend:
@@ -32,4 +33,17 @@ frontend:
     strategy: depend
   only:
     changes:
-      - frontend/**/*   
+      - frontend/**/*
+      
+
+momo-chart:
+  stage: module-pipelines
+  trigger:
+    include:
+      - local: /momo-store-chart/.gitlab-ci.yml
+    strategy: depend
+  only:
+    changes:
+      - momo-store-chart/**/* 
+      
+     

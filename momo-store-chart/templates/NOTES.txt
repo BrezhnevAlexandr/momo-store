@@ -1,0 +1,16 @@
+1. site aviable: momo-store-abrezhnev-001-022.ru
+
+2. Monitoring tools 
+
+2.1
+# - prometheus
+monitoring.momo-store-abrezhnev-001-022.ru
+
+2.2
+# grafana
+grafana.momo-store-abrezhnev-001-022.ru
+admin\admin
+
+2.3
+#alertmanager
+alertmanager.momo-store-abrezhnev-001-022.ru

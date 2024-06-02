@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vpa-recommender
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vpa-recommender
+  template:
+    metadata:
+      labels:
+        app: vpa-recommender
+    spec:
+      containers:
+        - name: recommender
+          image: k8s.gcr.io/autoscaling/vpa-recommender:0.9.2
+          ports:
+            - containerPort: 8942
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vpa-updater
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vpa-updater
+  template:
+    metadata:
+      labels:
+        app: vpa-updater
+    spec:
+      containers:
+        - name: updater
+          image: k8s.gcr.io/autoscaling/vpa-updater:0.9.2
+          ports:
+            - containerPort: 8944
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vpa-admission-controller
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vpa-admission-controller
+  template:
+    metadata:
+      labels:
+        app: vpa-admission-controller
+    spec:
+      containers:
+        - name: admission-controller
+          image: k8s.gcr.io/autoscaling/vpa-admission-controller:0.9.2
+          ports:
+            - containerPort: 8943
+          volumeMounts:
+            - name: vpa-tls-certs
+              mountPath: /etc/tls-certs
+      volumes:
+        - name: vpa-tls-certs
+          secret:
+            secretName: vpa-tls-certs
