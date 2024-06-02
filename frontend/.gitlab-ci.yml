@@ -32,7 +32,8 @@ test-frontend:
   script:
     - cd frontend
     - npm install
-    - vue add unit-jest
+    - npm install -g @vue/cli
+    - yes | vue add unit-jest
     - npm test
   only:
     changes:
