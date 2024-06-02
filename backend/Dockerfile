@@ -1,5 +1,5 @@
 # Этап сборки
-FROM golang:1.17 as builder
+FROM huecker.io/library/golang:1.17 as builder
 ARG VERSION=${VERSION}
 WORKDIR /usr/src/app
 COPY go.mod go.sum ./
@@ -9,7 +9,7 @@ WORKDIR /usr/src/app/cmd/api
 RUN CGO_ENABLED=0 GOOS=linux go build -o /usr/src/app/myapp -ldflags "-X main.Version=${VERSION}"
 
 # Этап релиза
-FROM alpine:latest
+FROM huecker.io/library/alpine:latest
 ARG VERSION=${VERSION}
 WORKDIR /app
 COPY --from=builder /usr/src/app/myapp .

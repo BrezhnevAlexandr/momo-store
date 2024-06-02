@@ -29,7 +29,7 @@ build-backend-code-job:
 # Тестирование бэкенда
 test-backend:
   stage: test
-  image: golang:1.17
+  image: huecker.io/library/golang:1.17
   script:
     - cd backend
     - go test -v ./...

@@ -28,7 +28,7 @@ build-frontend-code-job:
 # Тестирование фронтенда
 test-frontend:
   stage: test
-  image: node:16
+  image: huecker.io/library/node:16
   script:
     - cd frontend
     - npm install
