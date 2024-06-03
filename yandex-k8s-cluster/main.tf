@@ -3,11 +3,6 @@ terraform {
     yandex = {
       source  = "yandex-cloud/yandex"
       version = ">= 0.87.0"
-    }
-    
-  kubernetes = {
-      source = "hashicorp/kubernetes"
-      version = ">= 1.11.1"
     }      
   }
   # Хранение состояния k8s
@@ -26,10 +21,6 @@ provider "yandex" {
   cloud_id  = var.yandex_cloud_id
   folder_id = var.yandex_folder_id
   zone      = var.yandex_zone_name
-}
-
-provider "kubernetes" {
-  config_path = "~/.kube/config"
 }
 
 resource "yandex_vpc_network" "default" {
@@ -106,4 +97,33 @@ resource "kubernetes_namespace" "example" {
   metadata {
     name = "std-ext-001-022"
   }
+}
+
+resource "yandex_lb_network_load_balancer" "default" {
+  name = "k8s-load-balancer"
+  listener {
+    name = "http"
+    port = 80
+    external_address_spec {
+      # Automatically allocate an external IP
+      zone_id = var.yandex_zone_name
+    }
+  }
+  attached_target_group {
+    target_group_id = yandex_kubernetes_node_group.default.id
+  }
+}
+
+output "external_ip_address" {
+  value = yandex_lb_network_load_balancer.default.listener.0.external_address_spec.0.address
+}
+
+resource "null_resource" "k8s_namespace" {
+  provisioner "local-exec" {
+    command = <<EOT
+    kubectl create namespace my-namespace
+    kubectl config set-context --current --namespace=my-namespace
+    EOT
+  }
+  depends_on = [yandex_kubernetes_cluster.default]
 }
