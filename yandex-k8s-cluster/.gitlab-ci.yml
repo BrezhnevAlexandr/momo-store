@@ -14,17 +14,13 @@ deploy:
     
   script:
     - cd yandex-k8s-cluster/
-#    - terraform init
-#    - terraform apply -auto-approve || true
+    - terraform init
+    - terraform apply -auto-approve || true
     - mkdir -p ~/.kube
-    - echo "$KUBECONFIG_CONTENT"
-#    - echo "$KUBECONFIG_CONTENT" >> ~/.kube/config
-#    - cat ~/.kube/config
-    - cat /builds/std-ext-001-022/momo-store.tmp/KUBECONFIG_CONTENT >> ~/.kube/config
-    - chmod 644 ~/.kube/config
-    - cat ~/.kube/config
-     
-#    - terraform apply -auto-approve
+    - echo "$KUBECONFIG"
+    - cat /builds/std-ext-001-022/momo-store.tmp/KUBECONFIG >> ~/.kube/config
+    - chmod 644 ~/.kube/config     
+    - terraform apply -auto-approve
   only:
     changes:
       - yandex-k8s-cluster/**/*
