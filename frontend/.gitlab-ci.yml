@@ -24,7 +24,7 @@ build-frontend-code-job:
       --build-arg VERSION=$VERSION
       --cache=true
 
-# Публикация Docker-образа с помощью Crane
+# Публикация Docker-образа с помощью Crane 
 upload-frontend-release:
   variables:
     GIT_STRATEGY: none

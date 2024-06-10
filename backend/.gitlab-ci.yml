@@ -26,7 +26,7 @@ build-backend-code-job:
       --cache=true
       
 
-# Тестирование бэкенда
+# Тестирование бэкенда 
 test-backend:
   stage: test
   image: huecker.io/library/golang:1.17
