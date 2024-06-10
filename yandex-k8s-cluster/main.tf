@@ -72,10 +72,6 @@ resource "yandex_kubernetes_cluster" "default" {
     yandex_resourcemanager_folder_iam_member.images-puller,
     yandex_resourcemanager_folder_iam_member.encrypterDecrypter
   ]
-#  kms_provider {
-#    key_id = yandex_kms_symmetric_key.kms-key.id
-#  }
-}
 
 resource "yandex_resourcemanager_folder_iam_member" "k8s-clusters-agent" {
   # Сервисному аккаунту назначается роль "k8s.clusters.agent".
@@ -125,13 +121,6 @@ resource "yandex_resourcemanager_folder_iam_member" "load-balancerAdmin" {
   role      = "load-balancer.admin"
   member    = "serviceAccount:${yandex_iam_service_account.myaccount.id}"
 }
-
-#resource "yandex_kms_symmetric_key" "kms-key" {
-#  # Ключ Yandex Key Management Service для шифрования важной информации, такой как пароли, OAuth-токены и SSH-ключи.
-#  name              = "kms-key"
-#  default_algorithm = "AES_128"
-#  rotation_period   = "8760h" # 1 год.
-#}
 
 resource "yandex_vpc_security_group" "k8s-public-services" {
   name        = "k8s-public-services"
@@ -239,16 +228,6 @@ resource "null_resource" "apply_vpa" {
   depends_on = [null_resource.apply_vpa_crd]
 }
 
-# добавление горизонтального автомасштабирования
-#resource "null_resource" "apply_hpa" {
-#  provisioner "local-exec" {
-#    command = "kubectl apply -f hpa.yaml"
-#  }
-#  depends_on = [yandex_kubernetes_cluster.default]
-#}
-
-
-
 #добавление группы нод
 resource "yandex_kubernetes_node_group" "default" {
   cluster_id = yandex_kubernetes_cluster.default.id
@@ -291,43 +270,3 @@ resource "yandex_kubernetes_node_group" "default" {
     "app" = "frontend"
   }
 }
-
-
-#resource "yandex_lb_target_group" "default" {
-#  name = "k8s-target-group"
-#  target {
-#    address = "10.2.0.0"
-#    subnet_id = yandex_vpc_subnet.default.id
-#  }
-#}
-#
-#resource "yandex_lb_network_load_balancer" "default" {
-#  name = "k8s-load-balancer"
-#  type = "external"
-#  listener {
-#    name = "http"
-#    port = 80
-#    external_address_spec {}
-#  }
-#  attached_target_group {
-#    target_group_id = yandex_lb_target_group.default.id
-#    healthcheck {
-#      name = "http"
-#      http_options {
-#        port = 80
-#        path = "/health"
-#      }
-#      interval = 5
-#      timeout = 3
-#      unhealthy_threshold = 2
-#      healthy_threshold = 2
-#    }
-#  }
-#}
-
-# Создание namespace
-#resource "kubernetes_namespace" "momo_namespace" {
-#  metadata {
-#    name = "momostore"
-#  }
-#}

@@ -17,7 +17,9 @@ deploy:
     - terraform init
     - terraform plan -out=tfplan
     - terraform apply -auto-approve tfplan || true
-    - export KUBECONFIG=$KUBECONFIG
+    - mkdir -p ~/.kube
+    - echo "$KUBECONFIG" >> ~/.kube/config
+    - chmod 644 ~/.kube/config
     - terraform apply -auto-approve tfplan
   only:
     changes:
