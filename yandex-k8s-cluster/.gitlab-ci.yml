@@ -14,13 +14,14 @@ deploy:
     
   script:
     - cd yandex-k8s-cluster/
-    - terraform init
-    - terraform apply -auto-approve || true
+#    - terraform init
+#    - terraform apply -auto-approve || true
     - mkdir -p ~/.kube
+    - echo "$KUBECONFIG"
     - echo "$KUBECONFIG" >> ~/.kube/config
     - chmod 644 ~/.kube/config
     - cat ~/.kube/config
-    - terraform apply -auto-approve
+#    - terraform apply -auto-approve
   only:
     changes:
       - yandex-k8s-cluster/**/*
