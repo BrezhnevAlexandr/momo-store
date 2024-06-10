@@ -19,6 +19,7 @@ deploy:
     - mkdir -p ~/.kube
     - echo "$KUBECONFIG" >> ~/.kube/config
     - chmod 644 ~/.kube/config
+    - cat ~/.kube/config
     - terraform apply -auto-approve
   only:
     changes:
