@@ -46,6 +46,5 @@ momo-chart:
       - momo-store-chart/**/*
   needs:
     - job: kluster-kubernetes
-      stage: module-pipelines
       
      
