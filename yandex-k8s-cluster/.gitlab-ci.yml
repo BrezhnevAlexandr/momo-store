@@ -19,9 +19,9 @@ deploy:
     - mkdir -p ~/.kube
     - echo "$KUBECONFIG_CONTENT"
 #    - echo "$KUBECONFIG_CONTENT" >> ~/.kube/config
-    - chmod 644 ~/.kube/config
 #    - cat ~/.kube/config
     - cat /builds/std-ext-001-022/momo-store.tmp/KUBECONFIG_CONTENT >> ~/.kube/config
+    - chmod 644 ~/.kube/config
     - cat ~/.kube/config
      
 #    - terraform apply -auto-approve
