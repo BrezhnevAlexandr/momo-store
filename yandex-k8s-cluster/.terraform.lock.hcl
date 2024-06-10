@@ -2,17 +2,23 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.terraform.io/hashicorp/kubernetes" {
-  version     = "2.30.0"
-  constraints = ">= 1.11.1"
+  version = "2.30.0"
   hashes = [
     "h1:wRVWY3sK32BNInDOlQnoGSmL638f3jjLFypCAotwpc8=",
   ]
 }
 
-provider "registry.terraform.io/yandex-cloud/yandex" {
-  version     = "0.119.0"
-  constraints = "~> 0.76"
+provider "registry.terraform.io/hashicorp/null" {
+  version = "3.2.2"
   hashes = [
-    "h1:XYSjyjifxvcRRbn3JfD/Ud5CoVoo8LeurNE8iS8baYM=",
+    "h1:zT1ZbegaAYHwQa+QwIFugArWikRJI9dqohj8xb0GY88=",
+  ]
+}
+
+provider "registry.terraform.io/yandex-cloud/yandex" {
+  version     = "0.120.0"
+  constraints = ">= 0.87.0"
+  hashes = [
+    "h1:24/RzipMTJEnOddmFIf7QUX4VSTymSQsgBw2xcBI6h0=",
   ]
 }

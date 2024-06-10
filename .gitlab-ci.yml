@@ -22,6 +22,7 @@ backend:
   only:
     changes:
       - backend/**/*
+  
 
 
 frontend:
@@ -42,4 +43,9 @@ momo-chart:
     strategy: depend
   only:
     changes:
-      - momo-store-chart/**/*    
+      - momo-store-chart/**/*
+  needs:
+    - job: kluster-kubernetes
+      stage: module-pipelines
+      
+     

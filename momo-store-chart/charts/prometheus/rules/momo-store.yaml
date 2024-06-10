@@ -1,0 +1,60 @@
+---
+groups:
+  - name: Sausage store rules
+    rules:
+    - alert: InstanceDown
+      expr: up{app="backend"} == 0
+      for: 1m
+      labels:
+        severity: critical
+        project: "momo_store"
+        component: "Backend"
+      annotations:
+        spacename: "Namespace: default"
+        info: "Level: Critical"
+        summary: "Summary: Instance {{ $labels.instance }} down"
+        description: "Description: Backend instance {{ $labels.instance }} is down for more than 1 minute."
+
+  - name: HTTP Error Alerts
+    rules:
+    - alert: HighErrorRate
+      expr: sum(rate(http_requests_total{status="500"}[5m])) by (job) > 0
+      for: 1m
+      labels:
+        severity: critical
+        service: backend
+      annotations:
+        spacename: "Namespace: default"
+        info: "Level: critical"
+        summary: "Summary: High error rate (500) for {{ $labels.job }}"
+        description: "Description: The rate of HTTP 500 responses is greater than 0 for the past 5 minutes."
+
+  - name: Latency Alerts
+    rules:
+    - alert: HighLatency
+      expr: histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{uri="/orders", method="POST", status="200"}[5m])) by (le)) > 0.1
+      for: 5m
+      labels:
+        severity: warning
+        service: backend
+      annotations:
+        spacename: "Namespace: default"
+        info: "Level: warning"
+        summary: "Summary: High latency for POST /api/orders"
+        description: "Description: The 95th percentile latency for POST requests to /orders has been above 100ms for the past 5 minutes."
+
+  - name: Actuator Alerts
+    rules:
+    - alert: ActuatorPrometheusErrors
+      expr: sum(rate(http_server_requests_seconds_count{uri="/metrics"}[2m])) by (status) > 0
+      for: 2m
+      labels:
+        severity: critical
+        service: backend
+      annotations:
+        spacename: "Namespace: default"
+        info: "Level: critical"
+        summary: "Summary: Errors for /metrics"
+        description: "Description: There have been errors for /metrics in the past 2 minutes."
+
+

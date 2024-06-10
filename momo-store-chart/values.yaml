@@ -1,0 +1,77 @@
+# Общие переменные
+global:
+  environment: "production"
+  imageRepository: "gitlab.praktikum-services.ru:5050/std-ext-001-022/momo-store"
+  imagePullSecrets: "docker-config-secret"
+  revisionHistoryLimit: 15
+  namespace: "momostore"
+  # значения указанные как null передаем либо ввиде файла либо при делое из гитлаба, указав вконце команды --set VAR=value1.
+  env:
+    CI_REGISTRY_IMAGE: "gitlab.praktikum-services.ru:5050/std-ext-001-022"
+    port: 8081
+    targetport: 8081
+
+# Настройки backend компонента
+backend:
+  replicaCount: 2
+  imageTag: "1.0.${NEXT_VERSION_B}"  
+  resources:
+    limits:
+      cpu: "100m"
+      memory: "128Mi"
+    requests:
+      cpu: "100m"
+      memory: "128Mi"  
+  rollingUpdate:
+    maxUnavailable: "20%"
+    maxSurge: "120%"
+
+# Настройки frontend компонента
+frontend:
+  replicaCount: 1  
+  imageTag: "1.0.${NEXT_VERSION_F}"
+  imagePullSecrets: "docker-config-secret"
+  service:
+    type: ClusterIP
+    port: 8081
+    targetPort: 8081
+    portAlert: 9093
+    portGraf: 3000
+    portMonit: 9090
+    protocol: TCP
+  ingress:
+    ingressClassName: "nginx"
+    host: "momo-store-abrezhnev-001-022.ru"
+    hostAlert: "alertmanager.momo-store-abrezhnev-001-022.ru"
+    hostGraf: "grafana.momo-store-abrezhnev-001-022.ru"
+    hostMonit: "monitoring.momo-store-abrezhnev-001-022.ru"
+    nameAlert: "alertmanager"
+    nameGraf: "grafana"
+    nameMonit: "prometheus"
+    tls: true
+
+# Настройки alertmanager компонента
+alertmanager:
+  telegram_bot_token: 5933756043:AAE8JLL5KIzgrNBeTP5e-1bkbJy4YRoeGjs
+  telegram_chat_id: -1001810571268
+
+# Настройки prometheus компонента
+prometheus:
+  yandex_cloud_services: []
+
+# Настройки Grafana компонента
+grafana:
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: Loki
+          type: loki
+          access: proxy
+          url: http://loki.default.svc.cluster.local:3100
+          isDefault: true
+
+# Настройки секретов
+secrets:
+  dockerConfigJson: "ewoJImF1dGhzIjogewoJCSJnaXRsYWIucHJha3Rpa3VtLXNlcnZpY2VzLnJ1OjUwNTAiOiB7CgkJCSJhdXRoIjogImMzUmtMV1Y0ZEMwd01ERXRNREl5T2xGWk5USjZOSEZ6IgoJCX0sCgkJImh0dHBzOi8vaW5kZXguZG9ja2VyLmlvL3YxLyI6IHsKCQkJImF1dGgiOiAiYzJoaGNuVnRZVzVBYldGcGJDNXlkVHBFZDJGeVprUjNZWEptTVRNeE16QXciCgkJfQoJfQp9"
+
