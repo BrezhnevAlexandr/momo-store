@@ -72,6 +72,7 @@ resource "yandex_kubernetes_cluster" "default" {
     yandex_resourcemanager_folder_iam_member.images-puller,
     yandex_resourcemanager_folder_iam_member.encrypterDecrypter
   ]
+}
 
 resource "yandex_resourcemanager_folder_iam_member" "k8s-clusters-agent" {
   # Сервисному аккаунту назначается роль "k8s.clusters.agent".
