@@ -3,7 +3,7 @@ stages:
   - deploy
 
 kluster-kubernetes:
-  stage: deploy
+  stage: module-pipelines
   trigger:
     include:
       - local: /yandex-k8s-cluster/.gitlab-ci.yml
