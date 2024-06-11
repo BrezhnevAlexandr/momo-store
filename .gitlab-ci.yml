@@ -1,9 +1,10 @@
 stages:
+  - prepare
   - module-pipelines
   - deploy
 
 kluster-kubernetes:
-  stage: module-pipelines
+  stage: prepare
   trigger:
     include:
       - local: /yandex-k8s-cluster/.gitlab-ci.yml
