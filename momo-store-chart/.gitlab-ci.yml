@@ -29,10 +29,11 @@ deploy:
     name: production/k8s
   before_script:    
     - mkdir -p ~/.kube
-    - echo "$KUBECONFIG" >> ~/.kube/config
-#    - cat /builds/std-ext-001-022/momo-store.tmp/KUBECONFIG >> ~/.kube/config
+    - echo "$KUBECONFIG"
+    - cat /builds/std-ext-001-022/momo-store.tmp/KUBECONFIG >> ~/.kube/config
     - chmod 644 ~/.kube/config
-    - cd momo-store-chart/ 
+    - cd momo-store-chart/
+    - kubectl get services 
     - kubectl apply -f vpa-crd.yaml
     - kubectl apply -f vpa.yaml
   
