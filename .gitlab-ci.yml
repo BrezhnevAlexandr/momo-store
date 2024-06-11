@@ -35,6 +35,7 @@ frontend:
     changes:
       - frontend/**/*
       
+
 momo-chart:
   stage: module-pipelines
   trigger:

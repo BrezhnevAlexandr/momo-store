@@ -15,15 +15,7 @@ deploy:
   script:
     - cd yandex-k8s-cluster/
     - terraform init
-    - terraform apply -auto-approve || true
-    - mkdir -p ~/.kube
-    - echo "$KUBECONFIG"
-    - cat /builds/std-ext-001-022/momo-store.tmp/KUBECONFIG >> ~/.kube/config
-    - cat ~/.kube/config
-    - chmod 644 ~/.kube/config     
     - terraform apply -auto-approve
   only:
     changes:
       - yandex-k8s-cluster/**/*
-  after_script:     
-    - rm ~/.kube/config

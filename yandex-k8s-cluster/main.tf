@@ -215,19 +215,19 @@ resource "yandex_vpc_security_group" "k8s-public-services" {
 
 
 # добавление вертикального автомасштабирования
-resource "null_resource" "apply_vpa_crd" {
-  provisioner "local-exec" {
-    command = "kubectl apply -f vpa-crd.yaml"
-  }
-  depends_on = [yandex_kubernetes_cluster.default]
-}
-
-resource "null_resource" "apply_vpa" {
-  provisioner "local-exec" {
-    command = "kubectl apply -f vpa.yaml"
-  }
-  depends_on = [null_resource.apply_vpa_crd]
-}
+#resource "null_resource" "apply_vpa_crd" {
+#  provisioner "local-exec" {
+#    command = "kubectl apply -f vpa-crd.yaml"
+#  }
+#  depends_on = [yandex_kubernetes_cluster.default]
+#}
+#
+#resource "null_resource" "apply_vpa" {
+#  provisioner "local-exec" {
+#    command = "kubectl apply -f vpa.yaml"
+#  }
+#  depends_on = [null_resource.apply_vpa_crd]
+#}
 
 #добавление группы нод
 resource "yandex_kubernetes_node_group" "default" {

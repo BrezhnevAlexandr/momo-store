@@ -31,7 +31,9 @@ deploy:
     - mkdir -p ~/.kube
     - echo "$KUBECONFIG"
     - cat /builds/std-ext-001-022/momo-store.tmp/KUBECONFIG >> ~/.kube/config
-    - chmod 644 ~/.kube/config        
+    - chmod 644 ~/.kube/config 
+    - kubectl apply -f vpa-crd.yaml
+    - kubectl apply -f vpa.yaml
   
   script:
     - helm repo add nexus $NEXUS_HELM_REPO --username $NEXUS_REPO_USER --password $NEXUS_REPO_PASS
