@@ -10,15 +10,14 @@ upload-helm-release:
     - mkdir -p ~/.kube
     - echo "$KUBECONFIG" >> ~/.kube/config
 #       - cat /builds/std-ext-001-022/momo-store.tmp/KUBECONFIG >> ~/.kube/config
-    - chmod 644 ~/.kube/config
-    - kubectl get services     
+    - chmod 644 ~/.kube/config         
   script:    
 #    - helm lint ./momo-store-chart
 #    - CHART_FILE=$(helm package --version $VERSION ./momo-store-chart | grep "Successfully packaged chart" | awk '{print $NF}')    
 #    - echo "Uploading ${CHART_FILE} to Nexus..."
 #    - >
 #       curl -v -u std-ext-001-022:QY52z4qs $NEXUS_HELM_REPO --upload-file ${CHART_FILE}
-    - 
+    - kubectl get services
   after_script:
     - rm ~/.kube/config       
   only:
