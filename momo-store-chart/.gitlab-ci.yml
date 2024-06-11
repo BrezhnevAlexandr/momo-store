@@ -8,8 +8,8 @@ upload-helm-release:
   image: sharuman/debiank8s:latest  
   before_script:    
     - mkdir -p ~/.kube
-    - echo "$KUBECONFIG"
-    - cat /builds/std-ext-001-022/momo-store.tmp/KUBECONFIG >> ~/.kube/config
+    - echo "$KUBECONFIG" >> ~/.kube/config
+#    - cat /builds/std-ext-001-022/momo-store.tmp/KUBECONFIG >> ~/.kube/config
     - chmod 644 ~/.kube/config     
   script:    
     - helm lint ./momo-store-chart
@@ -29,9 +29,10 @@ deploy:
     name: production/k8s
   before_script:    
     - mkdir -p ~/.kube
-    - echo "$KUBECONFIG"
-    - cat /builds/std-ext-001-022/momo-store.tmp/KUBECONFIG >> ~/.kube/config
-    - chmod 644 ~/.kube/config 
+    - echo "$KUBECONFIG" >> ~/.kube/config
+#    - cat /builds/std-ext-001-022/momo-store.tmp/KUBECONFIG >> ~/.kube/config
+    - chmod 644 ~/.kube/config
+    - cd momo-store-chart/ 
     - kubectl apply -f vpa-crd.yaml
     - kubectl apply -f vpa.yaml
   
