@@ -13,7 +13,9 @@ deploy:
     - export YC_TOKEN=$YC_TOKEN
     - curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
     - export PATH=$PATH:/root/yandex-cloud/bin
-    - yc init --token=$YC_TOKEN --cloud-id=$YC_CLOUD_ID --folder-id=$YC_FOLDER_ID
+    - yc config set token $YC_TOK
+    - yc config set cloud-id $YC_CLOUD_ID
+    - yc config set folder-id $YC_FOLDER_ID
 
     
   script:
