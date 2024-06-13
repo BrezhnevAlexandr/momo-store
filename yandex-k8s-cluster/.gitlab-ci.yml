@@ -11,16 +11,21 @@ deploy:
     - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
     - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
     - export YC_TOKEN=$YC_TOKEN
+    - curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+    - export PATH=$PATH:/root/yandex-cloud/bin
+    - yc init --token=$YC_TOKEN --cloud-id=$YC_CLOUD_ID --folder-id=$YC_FOLDER_ID
+
     
   script:
     - cd yandex-k8s-cluster/
     - terraform init
     - terraform apply -auto-approve || true
     - mkdir -p ~/.kube
-    - echo "$KUBECONFIG"
-    - cat /builds/std-ext-001-022/momo-store.tmp/KUBECONFIG >> ~/.kube/config
+    - yc managed-kubernetes cluster get-credentials sharuman-k8s-cluster --external --force
     - cat ~/.kube/config
     - chmod 644 ~/.kube/config
+#    - echo "$KUBECONFIG"
+#    - cat /builds/std-ext-001-022/momo-store.tmp/KUBECONFIG >> ~/.kube/config    
     - terraform apply -auto-approve
   only:
     changes:
