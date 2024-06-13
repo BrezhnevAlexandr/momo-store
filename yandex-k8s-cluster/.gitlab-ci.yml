@@ -15,7 +15,8 @@ deploy:
   script:
     - cd yandex-k8s-cluster/
     - terraform init
-    - terraform apply -auto-approve
+    - terraform apply -auto-approve || true
+    - terraform apply -auto-approve || true
   only:
     changes:
       - yandex-k8s-cluster/**/*

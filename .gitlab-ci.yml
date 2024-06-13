@@ -47,7 +47,7 @@ momo-chart:
   only:
     changes:
       - momo-store-chart/**/*
-#  needs:
-#    - job: kluster-kubernetes  
+  needs:
+    - job: kluster-kubernetes  
       
      

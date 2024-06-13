@@ -31,42 +31,6 @@ resource "yandex_iam_service_account" "myaccount" {
   name = "k8s-brezhnev-account"
 }
 
-resource "kubernetes_service_account" "admin_user" {
-  metadata {
-    name      = "admin-user"
-    namespace = "kube-system"
-  }
-}
-
-resource "kubernetes_cluster_role_binding" "admin_user" {
-  metadata {
-    name = "admin-user"
-  }
-
-  role_ref {
-    api_group = "rbac.authorization.k8s.io"
-    kind      = "ClusterRole"
-    name      = "cluster-admin"
-  }
-
-  subject {
-    kind      = "ServiceAccount"
-    name      = kubernetes_service_account.admin_user.metadata[0].name
-    namespace = kubernetes_service_account.admin_user.metadata[0].namespace
-  }
-}
-
-resource "kubernetes_secret" "admin_user_token" {
-  metadata {
-    name      = "admin-user-token"
-    namespace = kubernetes_service_account.admin_user.metadata[0].namespace
-    annotations = {
-      "kubernetes.io/service-account.name" = kubernetes_service_account.admin_user.metadata[0].name
-    }
-  }
-  type = "kubernetes.io/service-account-token"
-}
-
 #Создаем vpc сеть.
 resource "yandex_vpc_network" "default" {
   name = "k8s-network"
@@ -306,4 +270,58 @@ resource "yandex_kubernetes_node_group" "default" {
   node_labels = {
     "app" = "frontend"
   }
+}
+
+resource "kubernetes_service_account" "admin_user" {
+  
+  depends_on = [
+    yandex_kubernetes_cluster.default,
+    yandex_kubernetes_node_group.default
+  ]
+  
+  metadata {
+    name      = "admin-user"
+    namespace = "kube-system"
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "admin_user" {
+  
+  depends_on = [
+    yandex_kubernetes_cluster.default,
+    yandex_kubernetes_node_group.default
+  ]
+  
+  metadata {
+    name = "admin-user"
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "cluster-admin"
+  }
+
+  subject {
+    kind      = "ServiceAccount"
+    name      = kubernetes_service_account.admin_user.metadata[0].name
+    namespace = kubernetes_service_account.admin_user.metadata[0].namespace
+  }
+}
+
+resource "kubernetes_secret" "admin_user_token" {
+  
+  depends_on = [
+    yandex_kubernetes_cluster.default,
+    yandex_kubernetes_node_group.default
+  ]
+  
+  metadata {
+    name      = "admin-user-token"
+    namespace = kubernetes_service_account.admin_user.metadata[0].namespace
+    annotations = {
+      "kubernetes.io/service-account.name" = kubernetes_service_account.admin_user.metadata[0].name
+    }
+  }
+  type = "kubernetes.io/service-account-token"
 }
