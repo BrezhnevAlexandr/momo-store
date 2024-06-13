@@ -1,10 +1,8 @@
 stages:
-  - prepare
   - module-pipelines
-  - deploy
 
 kluster-kubernetes:
-  stage: prepare
+  stage: module-pipelines
   trigger:
     include:
       - local: /yandex-k8s-cluster/.gitlab-ci.yml
@@ -39,15 +37,13 @@ frontend:
       
 
 momo-chart:
-  stage: deploy
+  stage: module-pipelines
   trigger:
     include:
       - local: /momo-store-chart/.gitlab-ci.yml
     strategy: depend
   only:
     changes:
-      - momo-store-chart/**/*
-  needs:
-    - job: kluster-kubernetes  
+      - momo-store-chart/**/* 
       
      
