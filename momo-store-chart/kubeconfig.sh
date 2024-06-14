@@ -1,5 +1,6 @@
 #!/bin/bash
-
+echo "0. Удаляем старый конфиг ~/.kube/config"
+rm ~/.kube/config
 echo "1. Вставляем ID и добавляем CLUSTER_ID в переменную окружения"
 echo "выполнение команды yc managed-kubernetes cluster get-credentials sharuman-k8s-cluster --external --force"
 yc managed-kubernetes cluster get-credentials sharuman-k8s-cluster --external --force
@@ -53,6 +54,9 @@ kubectl config set-context default \
   
 kubectl config use-context default \
   --kubeconfig=test.kubeconfig
-echo "8. Прибираемся за собой и меняем файл. Теперь доступен конфиг"  
+echo "8. Прибираемся за собой и меняем файл. Теперь доступен новый конфиг:"
 rm ~/.kube/config
 mv test.kubeconfig ~/.kube/config
+cd ..
+rm -rf testconfig/
+cat  ~/.kube/config
