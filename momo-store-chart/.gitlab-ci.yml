@@ -1,31 +1,33 @@
 #    
 stages:
-  - release
+#  - release
   - deploy
 
-upload-helm-release:
-  stage: release
-  image: sharuman/debiank8s:latest  
-  before_script:    
-    - curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
-    - export PATH=$PATH:/root/yandex-cloud/bin
-    - yc config set token $YC_TOK
-    - yc config set cloud-id $YC_CLOUD_ID
-    - yc config set folder-id $YC_FOLDER_ID
-    - mkdir -p ~/.kube
-    - yc managed-kubernetes cluster get-credentials sharuman-k8s-cluster --external --force
-    - chmod 644 ~/.kube/config         
-  script:    
-    - helm lint ./momo-store-chart
-    - CHART_FILE=$(helm package --version $VERSION ./momo-store-chart | grep "Successfully packaged chart" | awk '{print $NF}')    
-    - echo "Uploading ${CHART_FILE} to Nexus..."
-    - >
-       curl -v -u std-ext-001-022:QY52z4qs $NEXUS_HELM_REPO --upload-file ${CHART_FILE}
-  after_script:
-    - rm ~/.kube/config       
-  only:
-    changes:
-      - momo-store-chart/**/*
+#upload-helm-release:
+#  stage: release
+#  image: sharuman/debiank8s:latest  
+#  before_script:    
+#    - curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+#    - export PATH=$PATH:/root/yandex-cloud/bin
+#    - yc config set token $YC_TOK
+#    - yc config set cloud-id $YC_CLOUD_ID
+#    - yc config set folder-id $YC_FOLDER_ID
+#    - mkdir -p ~/.kube
+#    - yc managed-kubernetes cluster get-credentials sharuman-k8s-cluster --external --force
+#    - chmod 644 ~/.kube/config         
+#  script:    
+#    - helm lint ./momo-store-chart
+#    - CHART_FILE=$(helm package --version $VERSION ./momo-store-chart | grep "Successfully packaged chart" | awk '{print $NF}')    
+#    - echo "Uploading ${CHART_FILE} to Nexus..."
+#    - >
+#       curl -v -u std-ext-001-022:QY52z4qs $NEXUS_HELM_REPO --upload-file ${CHART_FILE}
+#  after_script:
+#    - rm ~/.kube/config       
+#  only:
+#    changes:
+#      - momo-store-chart/**/*
+
+
 deploy:
   stage: deploy
   image: sharuman/debiank8s:latest
@@ -38,9 +40,9 @@ deploy:
     - yc config set cloud-id $YC_CLOUD_ID
     - yc config set folder-id $YC_FOLDER_ID
     - mkdir -p ~/.kube
-#    - yc managed-kubernetes cluster get-credentials sharuman-k8s-cluster --external --force
-    - chmod 644 ~/.kube/config 
-    - kubeconfig.sh     
+#    - yc managed-kubernetes cluster get-credentials sharuman-k8s-cluster --external --force    
+    - kubeconfig.sh
+    - chmod 644 ~/.kube/config      
     
 #    - export CLUSTER_ID=$(yc managed-kubernetes cluster list --format json | jq -r '.[] | select(.name=="sharuman-k8s-cluster") | .id')
 #    # Получаем сертификат
