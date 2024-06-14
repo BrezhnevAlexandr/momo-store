@@ -39,9 +39,10 @@ deploy:
     - yc config set token $YC_TOK
     - yc config set cloud-id $YC_CLOUD_ID
     - yc config set folder-id $YC_FOLDER_ID
-    - mkdir -p ~/.kube
+    - mkdir -p ~/.kube    
 #    - yc managed-kubernetes cluster get-credentials sharuman-k8s-cluster --external --force    
-    - ./kubeconfig.sh
+     - chmod +x ../momo-store-chart/kubeconfig.sh
+    - ../momo-store-chart/kubeconfig.sh    
     - chmod 644 ~/.kube/config      
     
 #    - export CLUSTER_ID=$(yc managed-kubernetes cluster list --format json | jq -r '.[] | select(.name=="sharuman-k8s-cluster") | .id')
