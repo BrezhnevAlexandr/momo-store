@@ -36,7 +36,7 @@ deploy:
   before_script:    
     - curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
     - apt-get update && apt-get install -y jq
-    - export PATH=$PATH:/home/student/yandex-cloud/bin
+    - export PATH=$PATH:/root/yandex-cloud/bin
     - yc config set token $YC_TOK
     - yc config set cloud-id $YC_CLOUD_ID
     - yc config set folder-id $YC_FOLDER_ID
