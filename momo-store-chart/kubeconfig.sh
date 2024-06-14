@@ -1,5 +1,5 @@
 #!/bin/bash
-#!/usr/bin/env sh
+
 # Вставляем ID и добавляем CLUSTER_ID в переменную окружения
 rm ~/.kube/config
 yc managed-kubernetes cluster get-credentials sharuman-k8s-cluster --external --force
@@ -14,7 +14,7 @@ yc managed-kubernetes cluster get --id $CLUSTER_ID --format json | \
 
 CERT_CONTENT=$(base64 -w 0 ca.pem)
 
-# Подготавливаем токен
+# Подготавливаем токен 
 SA_TOKEN=$(kubectl -n kube-system get secret $(kubectl -n kube-system get secret | \
   grep admin-user-token | \
   awk '{print $1}') -o json | \
