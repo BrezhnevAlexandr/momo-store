@@ -21,7 +21,6 @@ upload-helm-release:
     - echo "Uploading ${CHART_FILE} to Nexus..."
     - >
        curl -v -u std-ext-001-022:QY52z4qs $NEXUS_HELM_REPO --upload-file ${CHART_FILE}
-    - kubectl get services
   after_script:
     - rm ~/.kube/config       
   only:
