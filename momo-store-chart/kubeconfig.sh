@@ -1,8 +1,11 @@
 #!/bin/bash
 
 echo "1. Вставляем ID и добавляем CLUSTER_ID в переменную окружения"
-rm ~/.kube/config
+echo "выполнение команды yc managed-kubernetes cluster get-credentials sharuman-k8s-cluster --external --force"
 yc managed-kubernetes cluster get-credentials sharuman-k8s-cluster --external --force
+echo "Результат выполнения предыдущей команды и факт подтверждения что yc установлен и работает"
+cat ~/.kube/config
+ 
 mkdir testconfig
 cd testconfig/
 
