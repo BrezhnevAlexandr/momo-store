@@ -1,31 +1,32 @@
-#     
+variables:
+   VERSION: 1.0.${CI_PIPELINE_ID}
 stages:
-#  - release
+  - release
   - deploy
 
-#upload-helm-release:
-#  stage: release
-#  image: sharuman/debiank8s:latest  
-#  before_script:    
-#    - curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
-#    - export PATH=$PATH:/root/yandex-cloud/bin
-#    - yc config set token $YC_TOK
-#    - yc config set cloud-id $YC_CLOUD_ID
-#    - yc config set folder-id $YC_FOLDER_ID
-#    - mkdir -p ~/.kube
-#    - yc managed-kubernetes cluster get-credentials sharuman-k8s-cluster --external --force
-#    - chmod 644 ~/.kube/config         
-#  script:    
-#    - helm lint ./momo-store-chart
-#    - CHART_FILE=$(helm package --version $VERSION ./momo-store-chart | grep "Successfully packaged chart" | awk '{print $NF}')    
-#    - echo "Uploading ${CHART_FILE} to Nexus..."
-#    - >
-#       curl -v -u std-ext-001-022:QY52z4qs $NEXUS_HELM_REPO --upload-file ${CHART_FILE}
-#  after_script:
-#    - rm ~/.kube/config       
-#  only:
-#    changes:
-#      - momo-store-chart/**/*
+upload-helm-release:
+  stage: release
+  image: sharuman/debiank8s:latest  
+  before_script:    
+    - curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+    - export PATH=$PATH:/root/yandex-cloud/bin
+    - yc config set token $YC_TOK
+    - yc config set cloud-id $YC_CLOUD_ID
+    - yc config set folder-id $YC_FOLDER_ID
+    - mkdir -p ~/.kube
+    - yc managed-kubernetes cluster get-credentials sharuman-k8s-cluster --external --force
+    - chmod 644 ~/.kube/config         
+  script:    
+    - helm lint ./momo-store-chart
+    - CHART_FILE=$(helm package --version $VERSION ./momo-store-chart | grep "Successfully packaged chart" | awk '{print $NF}')    
+    - echo "Uploading ${CHART_FILE} to Nexus..."
+    - >
+       curl -v -u std-ext-001-022:QY52z4qs $NEXUS_HELM_REPO --upload-file ${CHART_FILE}
+  after_script:
+    - rm ~/.kube/config       
+  only:
+    changes:
+      - momo-store-chart/**/*
 
 
 
@@ -34,10 +35,7 @@ deploy:
   image: sharuman/debiank8s:latest
   environment:
     name: production/k8s
-  before_script:    
-#    - curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
-#    - apt-get update && apt-get install -y jq
-#    - export PATH=$PATH:/root/yandex-cloud/bin
+  before_script:
     - yc config set token $YC_TOK
     - yc config set cloud-id $YC_CLOUD_ID
     - yc config set folder-id $YC_FOLDER_ID
