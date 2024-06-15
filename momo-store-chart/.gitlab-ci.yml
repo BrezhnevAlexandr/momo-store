@@ -47,8 +47,8 @@ deploy:
     - chmod 644 ~/.kube/config      
 
     # применяем манифест вертикального автоскалера
-    - kubectl apply -f vpa-crd.yaml
-    - kubectl apply -f vpa.yaml
+    - kubectl apply -f ./momo-store-chart/vpa-crd.yaml
+    - kubectl apply -f ./momo-store-chart/vpa.yaml
   
   script:
     - helm repo add nexus $NEXUS_HELM_REPO --username $NEXUS_REPO_USER --password $NEXUS_REPO_PASS
