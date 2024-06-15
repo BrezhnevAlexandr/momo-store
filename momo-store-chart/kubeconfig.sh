@@ -21,7 +21,7 @@ yc managed-kubernetes cluster get --id $CLUSTER_ID --format json | \
 CERT_CONTENT=$(base64 -w 0 ca.pem)
 
 echo "3. Подготавливаем токен" 
-SA_TOKEN=$(kubectl -n kube-system get secret --kubeconfig=/root/.kube/config $(kubectl -n kube-system get secret --kubeconfig=/root/.kube/config | \
+SA_TOKEN=$(kubectl -n kube-system get secret $(kubectl -n kube-system get secret | \
   grep admin-user-token | \
   awk '{print $1}') -o json | \
   jq -r .data.token | \
