@@ -56,15 +56,15 @@ deploy:
     - helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --namespace default
     - kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.8.0/cert-manager.yaml
     - - sleep 40
-    - >       
-       helm upgrade --install momo-store --atomic --timeout 15m --namespace default
-       nexus/momo-store || true
+#    - >       
+#       helm upgrade --install momo-store --atomic --timeout 15m --namespace default
+#       nexus/momo-store || true
     - >       
        helm upgrade --install momo-store --atomic --timeout 15m --namespace default
        nexus/momo-store    
     - helm upgrade --atomic --install loki grafana/loki-stack --namespace default
-    - kubectl get services
-    - echo "use external IP nginx ingress for A record of your site"    
+    - export INGRESS_IP=$(kubectl get svc ingress-nginx-controller --namespace default -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    - echo "Подставь этот адрес в А запись в домене - Ingress IP: $INGRESS_IP"    
   after_script:     
     - rm ~/.kube/config         
  
