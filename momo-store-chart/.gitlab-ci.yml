@@ -1,32 +1,8 @@
-#     
 stages:
-#  - release
   - deploy
 
-#upload-helm-release:
-#  stage: release
-#  image: sharuman/debiank8s:latest  
-#  before_script:    
-#    - curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
-#    - export PATH=$PATH:/root/yandex-cloud/bin
-#    - yc config set token $YC_TOK
-#    - yc config set cloud-id $YC_CLOUD_ID
-#    - yc config set folder-id $YC_FOLDER_ID
-#    - mkdir -p ~/.kube
-#    - yc managed-kubernetes cluster get-credentials sharuman-k8s-cluster --external --force
-#    - chmod 644 ~/.kube/config         
-#  script:    
-#    - helm lint ./momo-store-chart
-#    - CHART_FILE=$(helm package --version $VERSION ./momo-store-chart | grep "Successfully packaged chart" | awk '{print $NF}')    
-#    - echo "Uploading ${CHART_FILE} to Nexus..."
-#    - >
-#       curl -v -u std-ext-001-022:QY52z4qs $NEXUS_HELM_REPO --upload-file ${CHART_FILE}
-#  after_script:
-#    - rm ~/.kube/config       
-#  only:
-#    changes:
-#      - momo-store-chart/**/*
-
+variables:
+  KUBECONFIG_PATH: /root/.kube/config
 
 deploy:
   stage: deploy
@@ -41,35 +17,11 @@ deploy:
     - yc config set cloud-id $YC_CLOUD_ID
     - yc config set folder-id $YC_FOLDER_ID
     - mkdir -p ~/.kube
-    - touch $KUBECONFIG_PATH
-    - yc managed-kubernetes cluster get-credentials sharuman-k8s-cluster --external --force --kubeconfig=$KUBECONFIG_PATH
-    - export KUBECONFIG=$KUBECONFIG_PATH
-    - sed -i 's|/home/student/yandex-cloud/bin/yc|/root/yandex-cloud/bin/yc|' $KUBECONFIG_PATH
     - chmod +x ./momo-store-chart/kubeconfig.sh
     - bash ./momo-store-chart/kubeconfig.sh    
-    - chmod 644 ~/.kube/config      
+    - chmod 644 ~/.kube/config
 
-    # применяем манифест вертикального автоскалера 
-    - rm ca.pem
-    - kubectl apply -f vpa-crd.yaml
-    - kubectl apply -f vpa.yaml
-  
   script:
-    - helm repo add nexus $NEXUS_HELM_REPO --username $NEXUS_REPO_USER --password $NEXUS_REPO_PASS
-    - helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-    - helm repo add grafana https://grafana.github.io/helm-charts
-    - helm repo update
-    - helm install ingress-nginx ingress-nginx/ingress-nginx
-    - kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.8.0/cert-manager.yaml 
-    - >       
-       helm upgrade --install momo-store --atomic --timeout 15m
-       nexus/momo-store || true
-    - >       
-       helm upgrade --install momo-store --atomic --timeout 15m
-       nexus/momo-store    
-    - helm upgrade --atomic --install loki grafana/loki-stack
-    - kubectl get services
-    - echo "use external IP nginx ingress for A record of your site"    
-  after_script:     
-    - rm ~/.kube/config         
- 
+    - echo "KUBECONFIG content:"
+    - cat ~/.kube/config
+    - kubectl get nodes
