@@ -41,6 +41,7 @@ deploy:
     - yc config set cloud-id $YC_CLOUD_ID
     - yc config set folder-id $YC_FOLDER_ID
     - mkdir -p ~/.kube
+    - touch $KUBECONFIG_PATH
     - yc managed-kubernetes cluster get-credentials sharuman-k8s-cluster --external --force --kubeconfig=$KUBECONFIG_PATH
     - export KUBECONFIG=$KUBECONFIG_PATH
     - sed -i 's|/home/student/yandex-cloud/bin/yc|/root/yandex-cloud/bin/yc|' $KUBECONFIG_PATH
