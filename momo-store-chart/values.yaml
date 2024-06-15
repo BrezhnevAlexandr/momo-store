@@ -14,7 +14,7 @@ global:
 # Настройки backend компонента
 backend:
   replicaCount: 2
-  imageTag: "1.0.${NEXT_VERSION_B}"  
+  imageTag: "1.0.001"  
   resources:
     limits:
       cpu: "100m"
@@ -29,7 +29,7 @@ backend:
 # Настройки frontend компонента
 frontend:
   replicaCount: 1  
-  imageTag: "1.0.${NEXT_VERSION_F}"
+  imageTag: "1.0.001"
   imagePullSecrets: "docker-config-secret"
   service:
     type: ClusterIP
