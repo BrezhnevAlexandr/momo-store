@@ -25,6 +25,10 @@ sed -i 's|/home/student/yandex-cloud/bin/yc|/root/yandex-cloud/bin/yc|g' $KUBECO
 echo "3.2 Проверка содержимого kubeconfig после исправления пути"
 cat $KUBECONFIG_PATH
 
+echo "Проверка переменной PATH: $PATH"
+echo "Проверка наличия yc в PATH:"
+which yc
+
 echo "4. Получаем сертификат"
 CERT_CONTENT=$(yc managed-kubernetes cluster get --id $CLUSTER_ID --format json | jq -r .master.master_auth.cluster_ca_certificate | base64 -w 0)
 
