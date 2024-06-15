@@ -59,10 +59,9 @@ deploy:
     - >       
        helm upgrade --install momo-store --atomic --timeout 15m --namespace default
        nexus/momo-store    
-    - helm upgrade --atomic --install loki grafana/loki-stack --namespace default
-    - export INGRESS_IP=$(kubectl get svc ingress-nginx-controller --namespace default -o jsonpath='{.status.loadBalancer.ingress[0].ip}')        
+    - helm upgrade --atomic --install loki grafana/loki-stack --namespace default        
   after_script:
     - echo "Use IP adress for A-record of domain:" 
-    - echo $INGRESS_IP     
+    - kubectl get svc ingress-nginx-controller --namespace default -o jsonpath='{.status.loadBalancer.ingress[0].ip}'    
     - rm ~/.kube/config         
  
