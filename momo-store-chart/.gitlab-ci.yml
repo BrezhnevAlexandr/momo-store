@@ -9,7 +9,7 @@ deploy:
   image: sharuman/debiank8s:latest
   environment:
     name: production/k8s
-  before_script:    
+  before_script:
     - curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
     - apt-get update && apt-get install -y jq
     - export PATH=$PATH:/root/yandex-cloud/bin
@@ -18,7 +18,7 @@ deploy:
     - yc config set folder-id $YC_FOLDER_ID
     - mkdir -p ~/.kube
     - chmod +x ./momo-store-chart/kubeconfig.sh
-    - bash ./momo-store-chart/kubeconfig.sh    
+    - bash ./momo-store-chart/kubeconfig.sh
     - chmod 644 ~/.kube/config
 
   script:
