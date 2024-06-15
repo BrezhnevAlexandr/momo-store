@@ -46,8 +46,7 @@ deploy:
     - bash ./momo-store-chart/kubeconfig.sh    
     - chmod 644 ~/.kube/config      
 
-    # применяем манифест вертикального автоскалера 
-    - rm ca.pem
+    # применяем манифест вертикального автоскалера
     - kubectl apply -f vpa-crd.yaml
     - kubectl apply -f vpa.yaml
   
