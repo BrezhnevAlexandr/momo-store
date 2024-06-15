@@ -47,8 +47,8 @@ deploy:
     - chmod 644 ~/.kube/config      
 
     # применяем манифест вертикального автоскалера
-    - kubectl apply -f ./momo-store-chart/vpa-crd.yaml
-    - kubectl apply -f ./momo-store-chart/vpa.yaml
+    - kubectl apply -f ./momo-store-chart/vpa-crd.yaml --kubeconfig=/root/.kube/config
+    - kubectl apply -f ./momo-store-chart/vpa.yaml --kubeconfig=/root/.kube/config
   
   script:
     - helm repo add nexus $NEXUS_HELM_REPO --username $NEXUS_REPO_USER --password $NEXUS_REPO_PASS
@@ -56,7 +56,7 @@ deploy:
     - helm repo add grafana https://grafana.github.io/helm-charts
     - helm repo update
     - helm install ingress-nginx ingress-nginx/ingress-nginx
-    - kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.8.0/cert-manager.yaml 
+    - kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.8.0/cert-manager.yaml --kubeconfig=/root/.kube/config
     - >       
        helm upgrade --install momo-store --atomic --timeout 15m
        nexus/momo-store || true
@@ -64,7 +64,7 @@ deploy:
        helm upgrade --install momo-store --atomic --timeout 15m
        nexus/momo-store    
     - helm upgrade --atomic --install loki grafana/loki-stack
-    - kubectl get services
+    - kubectl get services --kubeconfig=/root/.kube/config
     - echo "use external IP nginx ingress for A record of your site"    
   after_script:     
     - rm ~/.kube/config         
