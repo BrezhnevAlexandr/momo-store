@@ -1,4 +1,4 @@
-# Общие переменные
+# Общие переменные 
 global:
   environment: "production"
   imageRepository: "gitlab.praktikum-services.ru:5050/std-ext-001-022/momo-store"
