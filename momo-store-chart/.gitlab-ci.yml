@@ -62,6 +62,10 @@ deploy:
     - helm upgrade --atomic --install loki grafana/loki-stack --namespace default        
   after_script:
     - echo "Use IP adress for A-record of domain:" 
-    - kubectl get svc ingress-nginx-controller --namespace default -o jsonpath='{.status.loadBalancer.ingress[0].ip}'    
+    - >
+       kubectl get svc ingress-nginx-controller 
+       --namespace default 
+       -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+       && echo    
     - rm ~/.kube/config         
  
