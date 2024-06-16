@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    app: {{ .Chart.Name }}
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app.kubernetes.io/component: {{ .Chart.Name }}
+    app.kubernetes.io/part-of: momo-store
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: app 
+                operator: In
+                values:
+                - {{ .Chart.Name }}
+      containers:
+        - image: {{ .Values.global.imageRepository }}/momo-frontend:{{ .Values.imageTag }}
+          name: {{ .Chart.Name }}          
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
+              readOnly: true
+          ports:
+            - name: {{ .Chart.Name }}
+              containerPort: {{ .Values.global.env.port }}
+      volumes:
+       - name: nginx-config
+         configMap:
+           name: nginx-config
+           items:
+             - key: default.conf
+               path: default.conf
+      imagePullSecrets:
+        - name: {{ .Values.global.imagePullSecrets }}
+  revisionHistoryLimit: {{ .Values.global.revisionHistoryLimit }}

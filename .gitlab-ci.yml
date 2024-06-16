@@ -1,0 +1,49 @@
+stages:
+  - module-pipelines
+
+kluster-kubernetes:
+  stage: module-pipelines
+  trigger:
+    include:
+      - local: /yandex-k8s-cluster/.gitlab-ci.yml
+    strategy: depend
+  only:
+    changes:
+      - yandex-k8s-cluster/**/*     
+
+
+
+backend:
+  stage: module-pipelines
+  trigger:
+    include:
+      - local: /backend/.gitlab-ci.yml
+    strategy: depend
+  only:
+    changes:
+      - backend/**/*
+  
+
+
+frontend:
+  stage: module-pipelines
+  trigger:
+    include:
+      - local: /frontend/.gitlab-ci.yml
+    strategy: depend
+  only:
+    changes:
+      - frontend/**/*
+      
+
+momo-chart:
+  stage: module-pipelines
+  trigger:
+    include:
+      - local: /momo-store-chart/.gitlab-ci.yml
+    strategy: depend
+  only:
+    changes:
+      - momo-store-chart/**/* 
+      
+     
