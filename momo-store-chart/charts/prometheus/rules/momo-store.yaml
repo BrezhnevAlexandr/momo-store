@@ -1,0 +1,16 @@
+---
+groups:
+  - name: Momo store rules
+    rules:
+    - alert: InstanceDown
+      expr: up{app="backend"} == 0
+      for: 1m
+      labels:
+        severity: critical
+        project: "momo_store"
+        component: "Backend"
+      annotations:
+        spacename: "Namespace: default"
+        info: "Level: Critical"
+        summary: "Summary: Instance {{ $labels.instance }} down"
+        description: "Description: Backend instance {{ $labels.instance }} is down for more than 1 minute."

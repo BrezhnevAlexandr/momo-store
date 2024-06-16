@@ -1,0 +1,44 @@
+stages:
+  - build
+  - release
+
+variables:
+  VERSION: "1.0.${NEXT_VERSION_F}"
+  DOCKER_DRIVER: overlay2
+
+# —борка и отправка образа с помощью Kaniko
+build-frontend-code-job:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:v1.9.0-debug
+    entrypoint: [""]
+  only:
+    changes:
+      - frontend/**/*
+  script:
+    - echo "build docker frontend"
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}/frontend"
+      --dockerfile "${CI_PROJECT_DIR}/frontend/Dockerfile"
+      --destination "${CI_REGISTRY_IMAGE}/momo-frontend:$CI_COMMIT_SHA"
+      --build-arg VERSION=$VERSION
+      --cache=true
+
+# ѕубликаци€ Docker-образа с помощью Crane 
+upload-frontend-release:
+  variables:
+    GIT_STRATEGY: none
+  image:
+    name: gcr.io/go-containerregistry/crane:debug
+    entrypoint: [""]
+  cache: []
+  stage: release
+  only:
+    changes:
+      - frontend/**/*
+  needs:
+    - build-frontend-code-job
+  before_script:
+    - crane auth login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - crane tag $CI_REGISTRY_IMAGE/momo-frontend:$CI_COMMIT_SHA $VERSION

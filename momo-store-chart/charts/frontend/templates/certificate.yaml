@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: momo-store-abrezhnev-001-022-tls
+spec:
+  secretName: tls-secret
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: momo-store-abrezhnev-001-022.ru
+  dnsNames:
+    - {{ .Values.ingress.host }}
+    - {{ .Values.ingress.hostAlert }}
+    - {{ .Values.ingress.hostGraf }}
+    - {{ .Values.ingress.hostMonit }}

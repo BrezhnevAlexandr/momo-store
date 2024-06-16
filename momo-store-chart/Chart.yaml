@@ -1,0 +1,22 @@
+apiVersion: v2
+appVersion: 0.1.2
+dependencies:
+- name: backend
+  repository: ""
+  version: 0.1.2
+- name: frontend
+  repository: ""
+  version: 0.1.2
+- name: alertmanager
+  repository: ""
+  version: 0.17.0
+- name: prometheus
+  repository: ""
+  version: 0.0.1
+- name: grafana
+  repository: ""
+  version: 0.17.0
+type: application
+name: momo-store
+description: Momo Store Helm Chart
+version: 0.1.2

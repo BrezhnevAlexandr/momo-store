@@ -1,0 +1,63 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    app: {{ .Chart.Name }}
+spec:
+  ingressClassName: {{ .Values.ingress.ingressClassName }}  
+  tls:
+    - hosts:
+        - {{ .Values.ingress.host }}
+        - {{ .Values.ingress.hostAlert }}
+        - {{ .Values.ingress.hostGraf }}
+        - {{ .Values.ingress.hostMonit }}
+      secretName: tls-secret 
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Chart.Name }}
+                port:
+                  number: {{ .Values.service.port }}
+    
+    - host: {{ .Values.ingress.hostAlert }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.ingress.nameAlert }}
+                port:
+                  number: {{ .Values.service.portAlert }}
+                  
+    - host: {{ .Values.ingress.hostGraf }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.ingress.nameGraf }}
+                port:
+                  number: {{ .Values.service.portGraf }}
+                  
+    - host: {{ .Values.ingress.hostMonit }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.ingress.nameMonit }}
+                port:
+                  number: {{ .Values.service.portMonit }}
+                  
+                  
+                  
+                
