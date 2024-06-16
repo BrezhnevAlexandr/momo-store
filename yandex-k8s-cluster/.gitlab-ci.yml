@@ -25,9 +25,7 @@ deploy:
     - mkdir -p ~/.kube
     - yc managed-kubernetes cluster get-credentials sharuman-k8s-cluster --external --force
     - cat ~/.kube/config
-    - chmod 644 ~/.kube/config
-#    - echo "$KUBECONFIG"
-#    - cat /builds/std-ext-001-022/momo-store.tmp/KUBECONFIG >> ~/.kube/config    
+    - chmod 644 ~/.kube/config    
     - terraform apply -auto-approve
   only:
     changes:
